@@ -10,4 +10,10 @@
       <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Hubs" />
+      <Folder Include="Models" />
+      <Folder Include="Services" />
+    </ItemGroup>
+
 </Project>

@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using SowaLabsChallenge.Services.Calculation;
 using SowaLabsChallenge.Services.FetchData;
 
 namespace SowaLabsChallenge.Tests
@@ -8,7 +9,8 @@ namespace SowaLabsChallenge.Tests
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpClient();
-            services.AddTransient<IFetchDataService, FetchDataService>();
+            services.AddSingleton<IFetchDataService, FetchDataService>();
+            services.AddSingleton<ICalculationService, CalculationService>();
         }
     }
 }

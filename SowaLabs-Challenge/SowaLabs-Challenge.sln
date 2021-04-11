@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SowaLabs-Challenge", "SowaLabs-Challenge\SowaLabs-Challenge.csproj", "{E6E7101C-607C-4266-8125-2C3EE8E5E008}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SowaLabs-Challenge.Tests", "SowaLabs-Challenge.Tests\SowaLabs-Challenge.Tests.csproj", "{CE266142-7133-4485-A494-BDA2C84C3908}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{E6E7101C-607C-4266-8125-2C3EE8E5E008}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6E7101C-607C-4266-8125-2C3EE8E5E008}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6E7101C-607C-4266-8125-2C3EE8E5E008}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE266142-7133-4485-A494-BDA2C84C3908}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE266142-7133-4485-A494-BDA2C84C3908}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE266142-7133-4485-A494-BDA2C84C3908}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE266142-7133-4485-A494-BDA2C84C3908}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

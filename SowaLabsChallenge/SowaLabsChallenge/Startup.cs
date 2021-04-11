@@ -29,7 +29,7 @@ namespace SowaLabsChallenge
             {
                 options.AddPolicy("CorsPolicy", builder =>
                 {
-                    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials();
+                    builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:5001", "http://localhost:5000").AllowCredentials();
                 });
             });
             

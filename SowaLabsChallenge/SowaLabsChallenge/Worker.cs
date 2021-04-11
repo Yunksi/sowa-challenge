@@ -32,7 +32,7 @@ namespace SowaLabsChallenge
                 //Calculate order book depth for BTCEUR
                 var calculatedOrderBookDepthBtcEur = await _calculationService.CalculateOrderBookDepth(orderBookBtcEur);
                 // Calculate order book market depth for BTCUSDC
-                var calculatedOrderBookDepthBtcUsd = await _calculationService.CalculateOrderBookDepth(orderBookBtcUsd);0
+                var calculatedOrderBookDepthBtcUsd = await _calculationService.CalculateOrderBookDepth(orderBookBtcUsd);
                 //Notify clients connected to SignalR hub
                 //Save returned data to file system
                 await Task.Delay(10000);

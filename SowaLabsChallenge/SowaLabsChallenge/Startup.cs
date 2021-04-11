@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SowaLabsChallenge.Services.Calculation;
 using SowaLabsChallenge.Services.FetchData;
 
 namespace SowaLabsChallenge
@@ -17,6 +18,7 @@ namespace SowaLabsChallenge
         {
             services.AddHttpClient();
             services.AddSingleton<IFetchDataService, FetchDataService>();
+            services.AddSingleton<ICalculationService, CalculationService>();
             services.AddHostedService<Worker>();
             services.AddSpaStaticFiles(configuration =>
             {

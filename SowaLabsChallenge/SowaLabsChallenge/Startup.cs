@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using SowaLabsChallenge.Hubs;
 using SowaLabsChallenge.Services.Calculation;
 using SowaLabsChallenge.Services.FetchData;
 
@@ -20,6 +21,19 @@ namespace SowaLabsChallenge
             services.AddSingleton<IFetchDataService, FetchDataService>();
             services.AddSingleton<ICalculationService, CalculationService>();
             services.AddHostedService<Worker>();
+
+            services.AddSignalR();
+            // For the sake of simplicity we will allow any origin, any header and any method.
+            // In the real world app we should allow only what is needed
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials();
+                });
+            });
+            
+            
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "clientapp/build";
@@ -36,12 +50,13 @@ namespace SowaLabsChallenge
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
-
+            app.UseCors("CorsPolicy");
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapGet("/", async context => { await context.Response.WriteAsync("Hello World!"); });
+                endpoints.MapHub<OrderBookHub>("/orderbook");
             });
             
             app.UseSpa(spa =>

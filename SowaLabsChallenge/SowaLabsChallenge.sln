@@ -1,8 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SowaLabs-Challenge", "SowaLabs-Challenge\SowaLabs-Challenge.csproj", "{E6E7101C-607C-4266-8125-2C3EE8E5E008}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SowaLabsChallenge", "SowaLabsChallenge\SowaLabsChallenge.csproj", "{E6E7101C-607C-4266-8125-2C3EE8E5E008}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SowaLabs-Challenge.Tests", "SowaLabs-Challenge.Tests\SowaLabs-Challenge.Tests.csproj", "{CE266142-7133-4485-A494-BDA2C84C3908}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SowaLabsChallenge.Tests", "SowaLabsChallenge.Tests\SowaLabsChallenge.Tests.csproj", "{CE266142-7133-4485-A494-BDA2C84C3908}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -12,8 +12,7 @@
 
     <ItemGroup>
       <Folder Include="Hubs" />
-      <Folder Include="Models" />
-      <Folder Include="Services" />
+      <Folder Include="Services\Calculation" />
     </ItemGroup>
 
 </Project>

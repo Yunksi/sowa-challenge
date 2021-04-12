@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import * as Highcharts from 'highcharts';
@@ -14,10 +14,44 @@ export const App: FC = () => {
   const [chartOptions, setChartOptions] = useState<Highcharts.Options>();
   const [currency, setCurrency] = useState<string>('BTCEUR');
   const [hubConnection, setHubConnection] = useState<HubConnection>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [orderBook, setOrderBook] = useState<OrderBookDepth>();
+  const [bids, setBids] = useState<number[][]>();
+  const [asks, setAsks] = useState<number[][]>();
 
   const apiUrl = process.env.REACT_APP_API_URL as string;
+
+  useEffect(() => {
+    const setUpSignalRConnection = async () => {
+      const connection = new HubConnectionBuilder()
+        .withUrl(apiUrl)
+        .withAutomaticReconnect()
+        .build();
+
+      connection.on('updateOrderBook', (orderBookDepth: string) => {
+        const orderBookDepthData = JSON.parse(orderBookDepth) as OrderBookDepth;
+        setBids(orderBookDepthData.bids.reverse());
+        setAsks(orderBookDepthData.asks);
+        setOrderBook(orderBookDepthData);
+        if (isLoading) setIsLoading(false);
+      });
+
+      try {
+        await connection.start();
+      } catch (err) {
+        console.error(err);
+      }
+
+      if (connection.state === HubConnectionState.Connected) {
+        connection.invoke('AddToGroup', currency).catch((err: Error) => {
+          return console.error(err.toString());
+        });
+      }
+
+      setHubConnection(connection);
+    };
+    setUpSignalRConnection();
+  }, []);
 
   useEffect(() => {
     const config: Highcharts.Options = {
@@ -82,65 +116,27 @@ export const App: FC = () => {
         {
           name: 'Bids',
           type: 'area',
-          data: [],
+          data: bids,
           color: '#03a7a8',
         },
         {
           name: 'Asks',
           type: 'area',
-          data: [],
+          data: asks,
           color: '#fc5857',
         },
       ],
     };
 
-    const setUpSignalRConnection = async () => {
-      const connection = new HubConnectionBuilder()
-        .withUrl(apiUrl)
-        .withAutomaticReconnect()
-        .build();
-
-      connection.on('updateOrderBook', (orderBookDepth: string) => {
-        const orderBookDepthData = JSON.parse(orderBookDepth) as OrderBookDepth;
-        const options: Highcharts.Options = {
-          series: [
-            {
-              name: 'Bids',
-              type: 'area',
-              data: orderBookDepthData.bids,
-              color: '#03a7a8',
-            },
-            {
-              name: 'Asks',
-              type: 'area',
-              data: orderBookDepthData.asks,
-              color: '#fc5857',
-            },
-          ],
-        };
-
-        setChartOptions(options);
-        setOrderBook(orderBookDepthData);
-        if (isLoading) setIsLoading(false);
-      });
-
-      try {
-        await connection.start();
-      } catch (err) {
-        console.error(err);
-      }
-
-      if (connection.state === HubConnectionState.Connected) {
-        connection.invoke('AddToGroup', currency).catch((err: Error) => {
-          return console.error(err.toString());
-        });
-      }
-
-      // setHubConnection(connection);
-    };
-    // setUpSignalRConnection();
     setChartOptions(config);
-  }, []);
+  }, [bids, asks]);
+
+  const currencyPairChanged = (event: ChangeEvent<HTMLSelectElement>) => {
+    hubConnection?.invoke('RemoveFromGroup', currency);
+    setCurrency(event.target.value);
+    hubConnection?.invoke('AddToGroup', event.target.value);
+    setIsLoading(true);
+  };
 
   return (
     <div>
@@ -150,25 +146,68 @@ export const App: FC = () => {
         <div>
           <HighchartsReact highcharts={Highcharts} options={chartOptions} />
           <OrderBookListContainer>
-            <OrderBookTitle>Order Book</OrderBookTitle>
-            <AsksContainer></AsksContainer>
-            <BidsContainer></BidsContainer>
-            {orderBook?.top10Asks.map((ask) => {
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <OrderBookTitle>Order Book</OrderBookTitle>
+              <select
+                name='currencyPair'
+                id='currencyPair'
+                value={currency}
+                onChange={(event) => currencyPairChanged(event)}
+              >
+                <option value='BTCEUR'>BTCEUR</option>
+                <option value='BTCUSD'>BTCUSD</option>
+              </select>
+            </div>
+
+            <OrderBookHeader>
+              <div>Price(USD)</div>
+              <div>Amount(BTC)</div>
+              <div>Total</div>
+
+              {/* {orderBook?.top10Asks.map((ask) => {
+                return (
+                  <div key={ask[0]}>
+                    <h1>{ask[0]}</h1>
+                    <h2>{ask[1]}</h2>
+                  </div>
+                );
+              })} */}
+            </OrderBookHeader>
+            <OrderBookList>
+              <h3 style={{ alignSelf: 'center' }}>Asks</h3>
+              <div style={{ display: 'flex', flexDirection: 'column-reverse' }}>
+                {orderBook?.top10Asks.map((ask) => {
+                  return (
+                    <Item key={ask[0]}>
+                      <p>{ask[0].toFixed(2)}</p>
+                      <p>{ask[1].toFixed(5)}</p>
+                      <p>{(ask[0] * ask[1]).toFixed(2)}</p>
+                    </Item>
+                  );
+                })}
+              </div>
+
+              <h3 style={{ alignSelf: 'center' }}>Bids</h3>
+              {orderBook?.top10Bids.map((bid) => {
+                return (
+                  <Item key={bid[0]}>
+                    <p>{bid[0].toFixed(2)}</p>
+                    <p>{bid[1].toFixed(5)}</p>
+                    <p>{(bid[0] * bid[1]).toFixed(2)}</p>
+                  </Item>
+                );
+              })}
+            </OrderBookList>
+            {/* <BidsContainer></BidsContainer> */}
+
+            {/* {orderBook?.top10Bids.map((bid) => {
               return (
-                <h1>
-                  {ask[0]}
-                  {ask[1]}
-                </h1>
-              );
-            })}
-            {orderBook?.top10Bids.map((bid) => {
-              return (
-                <div>
+                <div key={bid[0]}>
                   <h1>{bid[0]}</h1>
                   <h2>{bid[1]}</h2>
                 </div>
               );
-            })}
+            })} */}
             {/* <OrderBookList>Order Book</OrderBookList> */}
           </OrderBookListContainer>
         </div>
@@ -180,13 +219,28 @@ export const App: FC = () => {
 const OrderBookListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
-  background-color: red;
 `;
 
-const OrderBookTitle = styled.h2`
+const OrderBookTitle = styled.h3`
   color: black;
+  align-self: center;
 `;
 
-const AsksContainer = styled.div``;
-const BidsContainer = styled.div``;
+const OrderBookHeader = styled.div`
+  margin: 16px 16px;
+  flex-direction: row;
+  justify-content: space-between;
+  display: flex;
+`;
+
+const OrderBookList = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Item = styled.div`
+  display: flex;
+  margin: 0px 16px;
+  flex-direction: row;
+  justify-content: space-between;
+`;

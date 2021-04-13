@@ -11,7 +11,11 @@ Display the BTC/EUR market depth chart to the end user on a simple website; you 
 ## Running
 1. Open Terminal
 2. Go to SowaLabsChallenge project folder
-3. Run `docker-compose up`
+3. Run `docker compose up`
 4. API is hosted on `localhost:8080`, clientapp on `localhost:8080/clientapp`
+
+
+## Known Issues
+If you want to run application in docker, you must comment out Audit section (works ok, when running in Visual Studio)
 
 For any other questions don't hesitate to ask me. 

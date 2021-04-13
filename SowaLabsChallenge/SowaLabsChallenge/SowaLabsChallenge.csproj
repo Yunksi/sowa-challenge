@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net5.0</TargetFramework>
-        <RootNamespace>SowaLabs_Challenge</RootNamespace>
+        <RootNamespace>SowaLabsChallenge</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,9 +10,12 @@
       <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.5" />
     </ItemGroup>
 
+    <Target Name="CreateAuditFolder" AfterTargets="AfterPublish">
+        <MakeDir Directories="$(PublishDir)Audit" Condition="!Exists('$(PublishDir)Audit')" />
+    </Target>
+
     <ItemGroup>
-      <Folder Include="Audit\BTCEUR" />
-      <Folder Include="Audit\BTCUSD" />
+        <None Include="$(SolutionDir)Audit\**" CopyToOutputDirectory="PreserveNewest" />
     </ItemGroup>
 
 </Project>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using SowaLabsChallenge.Hubs;
 using SowaLabsChallenge.Services.Calculation;
 using SowaLabsChallenge.Services.FetchData;
@@ -18,17 +19,20 @@ namespace SowaLabsChallenge
         private readonly ICalculationService _calculationService;
         private readonly IHubContext<OrderBookHub, IOrderBookHub> _orderBookHub;
         private readonly IWebHostEnvironment _env;
+        private readonly ILogger _logger;
 
         public Worker(
             IFetchDataService fetchDataService, 
             ICalculationService calculationService,
             IHubContext<OrderBookHub, IOrderBookHub> orderBookHub,
-            IWebHostEnvironment env)
+            IWebHostEnvironment env,
+            ILogger<Worker> logger)
         {
             _fetchDataService = fetchDataService;
             _calculationService = calculationService;
             _orderBookHub = orderBookHub;
             _env = env;
+            _logger = logger;
         }
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {

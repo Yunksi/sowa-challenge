@@ -16,6 +16,6 @@ Display the BTC/EUR market depth chart to the end user on a simple website; you 
 
 
 ## Known Issues
-If you want to run application in docker, you must comment out Audit section (works ok, when running in Visual Studio)
+ - If you want to run application in docker, you must comment out Audit section (works ok, when running in Visual Studio) **FIXED**
 
 For any other questions don't hesitate to ask me. 

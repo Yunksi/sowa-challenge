@@ -29,7 +29,7 @@ export const App: FC = () => {
         .build();
 
       connection.on('updateOrderBook', (orderBookDepth: string) => {
-        const orderBookDepthData = JSON.parse(orderBookDepth) as OrderBookDepth;
+        const orderBookDepthData: OrderBookDepth = JSON.parse(orderBookDepth);
         setBids(orderBookDepthData.bids.reverse());
         setAsks(orderBookDepthData.asks);
         setOrderBook(orderBookDepthData);

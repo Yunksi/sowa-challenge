@@ -19,9 +19,9 @@ export const App: FC = () => {
   const [bids, setBids] = useState<number[][]>();
   const [asks, setAsks] = useState<number[][]>();
 
-  const apiUrl = process.env.REACT_APP_API_URL as string;
-
   useEffect(() => {
+    const apiUrl = process.env.REACT_APP_API_URL as string;
+
     const setUpSignalRConnection = async () => {
       const connection = new HubConnectionBuilder()
         .withUrl(apiUrl)
@@ -51,6 +51,8 @@ export const App: FC = () => {
       setHubConnection(connection);
     };
     setUpSignalRConnection();
+    // We disable warning message for useEffect missing dependencies since the useEffect is not dependent on any props or state changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -143,7 +145,7 @@ export const App: FC = () => {
       {isLoading ? (
         <div>Loading Data</div>
       ) : (
-        <div>
+        <div style={{ display: 'flex', flexDirection: 'row' }}>
           <HighchartsReact highcharts={Highcharts} options={chartOptions} />
           <OrderBookListContainer>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -160,7 +162,7 @@ export const App: FC = () => {
             </div>
 
             <OrderBookHeader>
-              <div>Price(USD)</div>
+              <div>Price({currency === 'BTCEUR' ? 'EUR' : 'USD'})</div>
               <div>Amount(BTC)</div>
               <div>Total</div>
 
@@ -219,6 +221,7 @@ export const App: FC = () => {
 const OrderBookListContainer = styled.div`
   display: flex;
   flex-direction: column;
+  flex-grow: 1;
 `;
 
 const OrderBookTitle = styled.h3`

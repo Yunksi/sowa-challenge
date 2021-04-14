@@ -199,17 +199,6 @@ export const App: FC = () => {
                 );
               })}
             </OrderBookList>
-            {/* <BidsContainer></BidsContainer> */}
-
-            {/* {orderBook?.top10Bids.map((bid) => {
-              return (
-                <div key={bid[0]}>
-                  <h1>{bid[0]}</h1>
-                  <h2>{bid[1]}</h2>
-                </div>
-              );
-            })} */}
-            {/* <OrderBookList>Order Book</OrderBookList> */}
           </OrderBookListContainer>
         </div>
       )}

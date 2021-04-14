@@ -53,9 +53,9 @@ namespace SowaLabsChallenge
                 var serializedBtUsdOrderBookDepthDto = JsonSerializer.Serialize(calculatedOrderBookDepthBtcUsd);
                 // Notify clients connected to SignalR hub
                 // Notify all clients subscribed to BTCEUR
-                await _orderBookHub.Clients.Group("BTCEUR").UpdateOrderBook(serializedBtcEurOrderBookDepthDto);
+                await _orderBookHub.Clients.Group("BTCEUR").UpdateOrderBook(calculatedOrderBookDepthBtcEur);
                 // Notify all clients subscribed to BTCUSDC
-                await _orderBookHub.Clients.Group("BTCUSD").UpdateOrderBook(serializedBtUsdOrderBookDepthDto);
+                await _orderBookHub.Clients.Group("BTCUSD").UpdateOrderBook(calculatedOrderBookDepthBtcUsd);
                 // Save returned data to file system
                 // For the sake of simplicity and purpose of the challenge we will write audit log to file system
                 // In the real case we would write audit to the database

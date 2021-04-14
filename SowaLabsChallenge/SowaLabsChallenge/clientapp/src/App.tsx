@@ -28,11 +28,10 @@ export const App: FC = () => {
         .withAutomaticReconnect()
         .build();
 
-      connection.on('updateOrderBook', (orderBookDepth: string) => {
-        const orderBookDepthData: OrderBookDepth = JSON.parse(orderBookDepth);
-        setBids(orderBookDepthData.bids.reverse());
-        setAsks(orderBookDepthData.asks);
-        setOrderBook(orderBookDepthData);
+      connection.on('updateOrderBook', (orderBookDepth: OrderBookDepth) => {
+        setBids(orderBookDepth.bids.reverse());
+        setAsks(orderBookDepth.asks);
+        setOrderBook(orderBookDepth);
         if (isLoading) setIsLoading(false);
       });
 
